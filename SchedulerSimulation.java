@@ -28,16 +28,20 @@ class Process implements Runnable {
     private String name; // Name of the process
     private int burstTime; // Total time the process requires to complete (in milliseconds)
     private int timeQuantum; // Time slice (time quantum) allowed per CPU access (in milliseconds)
-    private int remainingTime; // Time left for the process to finish its execution
+    private int remainingTime;
+    private int priority; // Priority level of the process
 
     // Constructor to initialize the process with name, burst time, and time quantum
-    public Process(String name, int burstTime, int timeQuantum) {
+    public Process(String name, int burstTime, int timeQuantum , int priority) {
         this.name = name;
         this.burstTime = burstTime;
         this.timeQuantum = timeQuantum;
-        this.remainingTime = burstTime; // Initially, remaining time is equal to the burst time
+        this.remainingTime = burstTime; 
+        this.priority=priority;// Initially, remaining time is equal to the burst time
     }
-
+public int getPriority(){
+    return priority;
+}
     // This method will be called when the thread for this process is started
     @Override
     public void run() {
@@ -197,8 +201,10 @@ public class SchedulerSimulation {
             int burstTime = timeQuantum/2 + random.nextInt(2 * timeQuantum + 1);
             
             // Create a new process object with a unique name, burst time, and the defined time quantum
-            Process process = new Process("P" + i, burstTime, timeQuantum);
             
+            int priority =(int)(Math.random()*5)+1;
+            Process process = new Process("p" +i,burstTime , timeQuantum,priority);
+
             // Add the process to the ready queue and the map
             addProcessToQueue(process, processQueue, processMap);
         }
